@@ -21,7 +21,7 @@ var svg = d3.select("#scatter")
 
 // Import data
 
-d3.csv("assets/data/data/.csv").then(function(stateData){
+d3.csv("./assets/data/data/.csv").then(function(stateData){
     // Step One: Clean and Organize Data 
     stateData.forEach(function(data){
         data.poverty = +data.poverty;
