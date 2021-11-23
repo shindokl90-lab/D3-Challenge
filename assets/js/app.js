@@ -19,9 +19,12 @@ var svg = d3.select("#scatter")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
 
+var chartGroup = svg.append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
 // Import data
 
-d3.csv("./assets/data/data/.csv").then(function(stateData){
+d3.csv("assets/data/data/.csv").then(function(stateData){
     // Step One: Clean and Organize Data 
     stateData.forEach(function(data){
         data.poverty = +data.poverty;
