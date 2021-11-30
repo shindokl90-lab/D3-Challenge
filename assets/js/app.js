@@ -12,7 +12,7 @@ var margin = {
 };
 
 var width = svgWidth - margin.left - margin.right;
-var height = svg.svgHeight - margin.top - margin.bottom; 
+var height = svgHeight - margin.top - margin.bottom; 
 
 var svg = d3.select("#scatter")
     .append("svg")
@@ -24,7 +24,8 @@ var chartGroup = svg.append("g")
 
 // Import data
 
-d3.csv("assets/data/data/.csv").then(function(stateData){
+d3.csv("assets/data/data.csv").then(function(stateData){
+    
     // Step One: Clean and Organize Data 
     stateData.forEach(function(data){
         data.poverty = +data.poverty;
@@ -34,14 +35,14 @@ d3.csv("assets/data/data/.csv").then(function(stateData){
 
     // Step Two: Create Axis
     var xScale = d3.scaleLinear()
-        .domain([0.9 * d3.min(stateData, s => s.poverty), 1.1 * d3.max(stateData, s => s.healthcare)])
-        .range([height,0]);
+        .domain([0.9 * d3.min(stateData, data => data.poverty), 1.1 * d3.max(stateData, data => data.healthcare)])
+        .range([0, width]);
     var yScale = d3.scaleLinear()
-        .domain([0.9* d3.min(stateData, s => s.healthcare), 1.1 * d3.max(stateData, s => s.healthcare)])
+        .domain([0.9* d3.min(stateData, data => data.healthcare), 1.1 * d3.max(stateData, data => data.healthcare)])
         .range([height, 0]);
     
     var xAxis = d3.axisBottom(xScale).ticks(8);
-    var yAxis = d3.axisLeft(yscale).ticks(12);
+    var yAxis = d3.axisLeft(yScale).ticks(12);
 
     // Step Three: Place Axes on Chart
 
@@ -49,7 +50,7 @@ d3.csv("assets/data/data/.csv").then(function(stateData){
         .attr("transform", `translate(0,${height})`)
         .call(xAxis);
     chartGroup.append("g")
-        call(yAxis);
+        .call(yAxis);
 
     // Make Bubbles for Bubble Chart
 
@@ -67,8 +68,8 @@ d3.csv("assets/data/data/.csv").then(function(stateData){
         .enter()
         .append("text")
         .text(d => d.abbr)
-        .attr("x", d => xScale(d.poverty))
-        .attr("y", d => yScale(d.healthcare)+5)
+        .attr("x", data => xScale(data.poverty))
+        .attr("y", data => yScale(data.healthcare)+5)
         .classed("stateText", true);
 
     // Step Four: Create Tooltip on hover
